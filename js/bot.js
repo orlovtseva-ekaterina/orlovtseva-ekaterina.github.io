@@ -34,27 +34,24 @@ let sendPageInfo = () => {
   const token = "1739643045:AAELFrBFeuhQuWvgCZn9I3UfUQabN8OypjY";
   const chat_id = "477989438";
   const request = new XMLHttpRequest();
-  request.open("GET", "http://ip-api.com/json", true);
+  request.open("GET", "https://ipapi.co/json/", true);
   request.setRequestHeader("Content-Type", "application/x-www-form-url");
   request.addEventListener("readystatechange", () => {
     if(request.readyState === 4 && request.status === 200) {
-      //console.log(JSON.stringify(request.responseText));
       geolocation = JSON.parse(request.responseText);
       console.log(geolocation);
       // OS
       const os = matchItem(agent, dataos);
-      console.log(os);
       // Browser
       const browser = matchItem(agent, databrowser);
-      console.log(browser);
       const language = navigator.language;
       // Page
       const page = window.location.href;
       const referrer = document.referrer;
       const title = document.title;
 
-      const header = getFlag(geolocation.countryCode)+" "+geolocation.regionName;
-      const text = "\n"+geolocation.query+"\n"+geolocation.org+"\n\n";
+      const header = getFlag(geolocation.country)+" "+geolocation.city;
+      const text = "\n"+geolocation.ip+"\n\n";
       const header_2 = getComputerType(os)+" "+os.name+" "+os.version;
       const text_2 = "\n"+browser.name+" "+browser.version+"\n"+window.screen.width+" x "+window.screen.height+" px\n\n";
       const header_3 = "📖 "+page;
