@@ -81,10 +81,11 @@ function ready(error, map, data) {
     div.transition().duration(300)
       .style("opacity", 0);
   })
-  .on("click", function() {
+  .on("click", function(d) {
     $('#overlay').fadeToggle('fast',function(){
         $('#box').animate({'right':'0'},500);
     });
+    $('#name_region_head').text( nameById[d.properties.ISO_2] );
   })
 
   // добавление городов на карту

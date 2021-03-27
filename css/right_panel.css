@@ -55,3 +55,10 @@
 .box hr{
   margin-top:0px;
 }
+
+@media (max-width: 767px) {
+    .box {
+      width: 100%;
+      right: -101vw;
+    }
+}
