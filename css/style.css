@@ -3,7 +3,7 @@ h1 {
   right: 0px;
   position: relative;
   font-family: 'Open Sans', sans-serif;
-  font-size: 22px;
+  font-size: 1.1rem/*22px*/;
   font-weight: 700;
   fill: rgb(0, 0, 0);
   text-align: left;
@@ -78,4 +78,8 @@ div.tooltip_d3 {
 
 .full-screen-height{
   height: 100vh;
+}
+
+.navbar-brand{
+  font-size:1.1rem;
 }
