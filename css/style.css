@@ -22,9 +22,9 @@ h2 {
   word-break: break-word;
 }
 
-#legend {
+/*#legend {
   margin-bottom: -50px;
-}
+}*/
 
 path {
   stroke: white;
@@ -56,7 +56,6 @@ div.tooltip_d3 {
 
 .legendTitle {
   font-family: 'Open Sans', sans-serif;
-  font-size: 15px;
   fill: #4F4F4F;
   font-weight: 18;
 }
@@ -89,4 +88,8 @@ div.tooltip_d3 {
 
 #region-graphs{
   overflow-y: scroll;
+}
+
+#legend-row {
+  margin-top: -15vh;
 }
