@@ -1,5 +1,5 @@
 // размер карты
-const width = 0.7*window.innerWidth; //1000;
+const width = 0.8*window.innerWidth; //1000;
 const height = width/2; //500;
 
 var color = d3.scale.linear()
@@ -9,7 +9,7 @@ var color = d3.scale.linear()
 // добавление div для всплывающих подсказок
 var div = d3.select("#my_dataviz")
   .append("div")
-  .attr("class", "tooltip")
+  .attr("class", "tooltip_d3")
   .style("opacity", 0);
 
 // добавляем SVG для карты
@@ -71,8 +71,8 @@ function ready(error, map, data) {
     div.transition().duration(300).style("opacity", 1)
     // вывод значений из датасета в подсказку
     div.html(nameById[d.properties.ISO_2] + "<br/>" + "<span style='font-size:18px;font-weight:700'>" + rateById[d.properties.ISO_2] + "" + "</span>")
-      .style("left", (d3.event.pageX) + "px")
-      .style("top", (d3.event.pageY - 30) + "px");
+      .style("left", (d3.event.layerX) + "px")
+      .style("top", (d3.event.layerY - 30) + "px");
   })
   .on("mouseout", function() {
     d3.select(this)
