@@ -89,3 +89,11 @@ div.tooltip_d3 {
 #region-graphs{
   overflow-y: scroll;
 }
+
+#legend-row{
+  height:60px;
+}
+
+#range-row{
+  margin-top:5%;
+}
