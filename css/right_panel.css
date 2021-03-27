@@ -57,6 +57,10 @@
   margin-top:0px;
 }
 
+.h-90 {
+  height: 90%;
+}
+
 @media (max-width: 767px) {
     .box {
       width: 100%;

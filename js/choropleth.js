@@ -1,5 +1,25 @@
+let mapWidthMultiplier, fontWeightLegent;
+// параметры в зависимости от размера и соотношения экрана
+if( window.innerWidth >= 1025 ){
+  // множитель ширины карты
+  mapWidthMultiplier = 0.8;
+  // размер шрифта подписи легенды
+  fontWeightLegent = 0.8;
+} else {
+  // множитель ширины карты
+  mapWidthMultiplier = 0.9;
+  // размер шрифта подписи легенды
+  fontWeightLegent = 0.6;
+}
+
+if( window.innerHeight >= 769 ){
+  $('#legend-row').css('margin-top','-9%');/*-15vh*/
+} else {
+  $('#legend-row').css('margin-top','-13%');/*-12vh*/
+}
+
 // map dimension
-const width = 0.8*window.innerWidth; //1000;
+const width = mapWidthMultiplier*window.innerWidth; //1000;
 const height = width/2; //500;
 
 // color palette
@@ -124,10 +144,12 @@ var colorScale = d3.scale.linear()
   .domain([0, 50, 100]) // перечень значений из датасета(мин.–макс.), по которым надо добавлять цвет
   .range(['green', 'orange', 'red']); //Цвет, от какого и до какого нужно сделать растяжку
 */
+
+let widthLegendRow = $('#legend-row').width() * 35 / 100;
 // append a defs (for definition) element to your SVG
 var svgLegend = d3.select('#legend').append('svg')
-  .attr("width", 600)
-  .attr("height", 60);
+  .attr("width", ( widthLegendRow-10 ))
+  .attr("height", "5%");
 var defs = svgLegend.append('defs');
 
 // append a linearGradient element to the defs and give it a unique id
@@ -170,20 +192,21 @@ svgLegend.append("text")
   .attr("x", 0)
   .attr("y", 20)
   .style("text-anchor", "left")
+  .style("font-size", fontWeightLegent+"rem")
   .text("Уровень загрязнения %");
 
 // отображение прямоугольника и заполнение градиентом
 svgLegend.append("rect")
   .attr("x", 10)
   .attr("y", 30)
-  .attr("width", 300)
-  .attr("height", 15)
+  .attr("width", ( widthLegendRow-50 ))
+  .attr("height", '5%')
   .style("fill", "url(#linear-gradient)");
 
 //create tick marks
 var xLeg = d3.scale.linear()
   .domain([0, 100])
-  .range([0, 289]);
+  .range([0, ( widthLegendRow-50 )]);
 
 var axisLeg = d3.svg.axis(xLeg)
   .scale(xLeg).tickSize(13)
@@ -191,6 +214,7 @@ var axisLeg = d3.svg.axis(xLeg)
   .tickFormat(function(n) {
     return n + "%"
   })
+
 
 svgLegend
   .attr("class", "axis")

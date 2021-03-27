@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/right_panel.css">
+
     <!-- ========================= Favicons ============================== -->
     <link rel="icon" href="/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -28,21 +29,16 @@
   <body class="full-screen-height">
 
     <header>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="navbar-brand mr-auto ml-auto">СОСТОЯНИЕ ОКРУЖАЮЩЕЙ СРЕДЫ</div>
-        <!--button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button-->
-        <!--div class="collapse navbar-collapse" id="navbarCollapse">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link cool-link" href="/en/">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link cool-link" href="/en/courses">Courses</a>
-            </li>
-          </ul>
-        </div-->
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top"><!--bg-light-->
+        <form  class="navbar-brand mr-auto ml-auto">
+          <div class="form-group">
+            <select class="form-control" id="mapType">
+              <option value="air">АТМОСФЕРНЫЙ ВОЗДУХ</option>
+              <option value="water">ВОДНЫЕ ОБЪЕКТЫ</option>
+            </select>
+          </div>
+        </form>
+        <!--div class="navbar-brand mr-auto ml-auto">СОСТОЯНИЕ ОКРУЖАЮЩЕЙ СРЕДЫ</div-->
       </nav>
     </header>
 
@@ -50,6 +46,25 @@
           <div class="row align-self-center w-100 mr-0 ml-0">
             <div class="col-12 col-md-10 offset-md-1 home-caption">
               <div id="my_dataviz"></div>
+              <div class="row" id="legend-row">
+                <div class="col-12">
+                  <div id="legend"></div>
+                </div>
+              </div>
+              <div class="row" id="range-row">
+                <div class="col-12">
+                  <form>
+                    <div class="form-group">
+                      <input type="range" class="form-control-range" list="yearList" id="yearRange" min="2017" max="2019" value="2019">
+                      <datalist id="yearList">
+                        <option value="2017" label="2017">
+                        <option value="2018" label="2018">
+                        <option value="2019" label="2019">
+                      </datalist>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
     </div>
@@ -60,34 +75,35 @@
         <span class="close" id="boxclose"></span>
         <h1 id="name_region_head"></h1>
         <hr>
-        <div class="container-fluid pl-0 pr-0">
-          <div class="row">
-            <div class="col-12" id="first-graph"></div>
+        <div class="container-fluid d-flex h-90 pl-0 pr-0">
+          <div class="row align-self-center w-100">
+            <div class="col-12" id="first-graph" style="height:50vh"></div>
           </div>
-          <div class="row">
+          <!--div class="row">
             <div class="col-12" id="second-graph"></div>
           </div>
           <div class="row">
             <div class="col-12" id="third-graph"></div>
-          </div>
+          </div-->
         </div>
     </div>
-
-    <!--h2>карта | список</h2-->
-    <div id="legend"></div>
 
     <!-- ========================= Scripts ============================== -->
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/queue.v1.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/topojson.v1.min.js"></script>
     <!--script src="/js/jquery-3.2.1.slim.min.js"></script-->
-    <script src="/js/jquery-3.2.1.js"></script>
-    <script src="/js/popper.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/highcharts.js"></script>
-    <script src="/js/choropleth.js"></script>
-    <script src="/js/script.js"></script>
-    <script src="/js/bot.js"></script>
+    <script src="./js/jquery-3.5.1.js"></script>
+    <script src="./js/popper.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/code/highcharts.js"></script>
+    <script src="./js/code/modules/series-label.js"></script>
+    <script src="./js/code/modules/exporting.js"></script>
+    <script src="./js/code/modules/export-data.js"></script>
+    <script src="./js/code/modules/accessibility.js"></script>
+    <script src="./js/choropleth.js"></script>
+    <script src="./js/script.js"></script>
+    <script src="./js/bot.js"></script>
 
   </body>
 </html>
