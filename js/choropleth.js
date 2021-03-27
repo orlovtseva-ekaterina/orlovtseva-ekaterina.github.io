@@ -14,8 +14,6 @@ if( window.innerWidth >= 1025 ){
 
 if( window.innerHeight >= 769 ){
   $('#legend-row').css('margin-top','-9%');/*-15vh*/
-  //$('#map-section').css('margin-top','-3vh');/*-15vh*/
-  //$('#range-row').css('margin-top', '-6%');
 } else {
   $('#legend-row').css('margin-top','-13%');/*-12vh*/
 }
