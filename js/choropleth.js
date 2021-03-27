@@ -5,13 +5,13 @@ if( window.innerWidth >= 1025 ){
   mapWidthMultiplier = 0.8;
   // размер шрифта подписи легенды
   fontWeightLegent = 0.8;
-  $('#legend-row').css('margin-top','-15vh');
+  $('#legend-row').css('margin-top','-15%');/*-15vh*/
 } else {
   // множитель ширины карты
   mapWidthMultiplier = 0.9;
   // размер шрифта подписи легенды
   fontWeightLegent = 0.6;
-  $('#legend-row').css('margin-top','-12vh');
+  $('#legend-row').css('margin-top','-20%');/*-12vh*/
 }
 
 // map dimension
