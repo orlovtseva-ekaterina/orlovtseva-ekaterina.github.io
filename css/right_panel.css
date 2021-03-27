@@ -12,16 +12,16 @@
 .box{
     position: fixed;
     top: 0;
-    right: -81vw;
+    right: -61vw;
     height: 100vh;
-    width: 80%;
+    width: 60%;
     background-color: #fff;
     color: #7F7F7F;
     padding: 20px;
     -moz-box-shadow: 0 1px 5px #333;
     -webkit-box-shadow: 0 1px 5px #333;
     z-index: 9999;
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
 }
 
 .close {
