@@ -80,6 +80,14 @@ div.tooltip_d3 {
   height: 100vh;
 }
 
+.navbar{
+  padding: .2rem 0rem;
+}
+
 .navbar-brand{
   font-size:1.1rem;
+}
+
+#region-graphs{
+  overflow-y: scroll;
 }
