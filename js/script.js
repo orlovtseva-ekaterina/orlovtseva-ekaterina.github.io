@@ -1,30 +1,22 @@
 function updateDataGraph( data=null ){
   let firstGraphParam = {
-      credits: {
-          enabled: false
-      },
       chart: {
           type: 'column'
       },
       title: {
-          text: 'Динамика изменения состояния окружающей среды'
+          text: 'Динамика изменения уровня загразнения окружающей среды'
       },
-      /*subtitle: {
-          text: 'Source: WorldClimate.com'
-      },*/
       xAxis: {
           categories: [
               '2017',
               '2018',
               '2019',
           ],
-          //crosshair: true,
-          gridLineWidth: 0.5,
-          gridLineColor: '#C0C0C0'
+          title:{
+            text:'Год'
+          }
       },
       yAxis: {
-          gridLineColor: '#FF0000',
-          gridLineWidth:1,
           min: 0,
           format: '{} %',
           title: {
@@ -55,7 +47,10 @@ function updateDataGraph( data=null ){
           color:'#0066CC',
           data: [83.6, 78.8, 98.5]
 
-      }]
+      }],
+      credits: {
+          enabled: false
+      }
   };
   return firstGraphParam;
 }
