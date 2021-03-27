@@ -6,7 +6,7 @@ if( window.innerWidth >= 1025 ){
   // размер шрифта подписи легенды
   fontWeightLegent = 0.8;
   $('#legend-row').css('margin-top','-9%');/*-15vh*/
-  $('#map-section').css('margin-top','-5vh');/*-15vh*/
+  $('#map-section').css('margin-top','-3vh');/*-15vh*/
 } else {
   // множитель ширины карты
   mapWidthMultiplier = 0.9;

@@ -87,3 +87,8 @@ $(document).on('click', '.overlay', function(){
       $('#box').animate({'right':'-101vw'},500);
   });
 });
+
+$(document).on('click','#yearRange',function(){
+  let valOnRange = $('#yearRange').val();
+  console.log(valOnRange);
+});
