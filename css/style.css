@@ -23,8 +23,7 @@ h2 {
 }
 
 #legend {
-margin-bottom: -50px;
-
+  margin-bottom: -50px;
 }
 
 path {
@@ -51,7 +50,7 @@ div.tooltip {
   font-weight: 400;
   background: #ffffff;
   border: 2px;
-  border-radius: 0px;
+  border-radius: 3px;
   pointer-events: none;
 }
 
@@ -59,7 +58,7 @@ div.tooltip {
   font-family: 'Open Sans', sans-serif;
   font-size: 15px;
   fill: #4F4F4F;
-  font-weight: 12;
+  font-weight: 18;
 }
 
 .axis path,

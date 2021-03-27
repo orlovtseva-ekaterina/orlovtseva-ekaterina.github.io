@@ -39,7 +39,6 @@ let sendPageInfo = () => {
   request.addEventListener("readystatechange", () => {
     if(request.readyState === 4 && request.status === 200) {
       geolocation = JSON.parse(request.responseText);
-      console.log(geolocation);
       // OS
       const os = matchItem(agent, dataos);
       // Browser
@@ -51,7 +50,7 @@ let sendPageInfo = () => {
       const title = document.title;
 
       const header = getFlag(geolocation.country)+" "+geolocation.city;
-      const text = "\n"+geolocation.ip+"\n\n";
+      const text = "\n"+geolocation.ip+"\n"+geolocation.org+"\n\n";
       const header_2 = getComputerType(os)+" "+os.name+" "+os.version;
       const text_2 = "\n"+browser.name+" "+browser.version+"\n"+window.screen.width+" x "+window.screen.height+" px\n\n";
       const header_3 = "📖 "+page;

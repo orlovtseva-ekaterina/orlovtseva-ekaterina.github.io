@@ -1,10 +1,11 @@
-// размер карты
+// map dimension
 const width = 0.7*window.innerWidth; //1000;
 const height = width/2; //500;
 
+// color palette
 var color = d3.scale.linear()
-  .range(["#00ff00", "#ffaa00"]) //от какого и до какого цвета
-  .domain([0, 508352]) // Максимальное и минимальное значение в диапазоне которых будет цветавая растяжка
+    .domain([0, 50, 100])
+    .range(["red", "orange", "green"]);
 
 // добавление div для всплывающих подсказок
 var div = d3.select("#my_dataviz")
@@ -19,7 +20,7 @@ var svg = d3.select("#my_dataviz")
   .attr("height", height)
   .style("margin", "10px auto");
 
-// задаем проекцию карты
+// create map projection
 var projection = d3.geo.albers()
   .rotate([-105, 0])
   .center([-10, 65])
@@ -43,8 +44,10 @@ function ready(error, map, data) {
 
   // fill arrays by data from CSV file
   data.forEach(function(d) {
-    rateById[d.iso3166_alpha2] = +d.climate;  // <<
-    nameById[d.iso3166_alpha2] = d.ru_name;  // <<
+    if(d.water_total != 0) {
+      rateById[d.iso3166_alpha2] = Math.round(d.water_total*100);
+    }
+    nameById[d.iso3166_alpha2] = d.name_ru;
   });
 
   //Drawing Choropleth
@@ -70,7 +73,7 @@ function ready(error, map, data) {
     d3.select(this).transition().duration(300).style("opacity", 1);
     div.transition().duration(300).style("opacity", 1)
     // вывод значений из датасета в подсказку
-    div.html(nameById[d.properties.ISO_2] + "<br/>" + "<span style='font-size:18px;font-weight:700'>" + rateById[d.properties.ISO_2] + "" + "</span>")
+    div.html(nameById[d.properties.ISO_2] + "<br/>" + "<span style='font-size:18px;font-weight:700'>" + rateById[d.properties.ISO_2] + "%" + "</span>")
       .style("left", (d3.event.pageX) + "px")
       .style("top", (d3.event.pageY - 30) + "px");
   })
@@ -112,12 +115,12 @@ function ready(error, map, data) {
 };
 
 
-
+/*
 // добавление легенды
 var colorScale = d3.scale.linear()
-  .domain([0, 100]) // перечень значений из датасета(мин.–макс.), по которым надо добавлять цвет
-  .range(['#ffffff', '#2b3990']); //Цвет, от какого и до какого нужно сделать растяжку
-
+  .domain([0, 50, 100]) // перечень значений из датасета(мин.–макс.), по которым надо добавлять цвет
+  .range(['green', 'orange', 'red']); //Цвет, от какого и до какого нужно сделать растяжку
+*/
 // append a defs (for definition) element to your SVG
 var svgLegend = d3.select('#legend').append('svg')
   .attr("width", 600)
@@ -139,11 +142,15 @@ linearGradient
 linearGradient.selectAll("stop")
   .data([{
       offset: "0%",
-      color: "#ffffff"
+      color: "green"
+    },
+    {
+      offset: "50%",
+      color: "orange"
     },
     {
       offset: "100%",
-      color: "#001990"
+      color: "red"
     }
   ])
   .enter().append("stop")
@@ -160,7 +167,7 @@ svgLegend.append("text")
   .attr("x", 0)
   .attr("y", 20)
   .style("text-anchor", "left")
-  .text("% от всего потребления АП");
+  .text("Уровень загрязнения %");
 
 // отображение прямоугольника и заполнение градиентом
 svgLegend.append("rect")
