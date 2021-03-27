@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/right_panel.css">
     <!-- ========================= Favicons ============================== -->
     <link rel="icon" href="/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -53,6 +54,18 @@
           </div>
     </div>
 
+    <div class="overlay" id="overlay" style="display:none;"></div>
+
+    <div class="box" id="box">
+        <span class="close" id="boxclose"></span>
+        <h1>Important message</h1>
+        <hr>
+        <p>
+            Here comes a very important message for your user.
+            Turn this window off by clicking the cross.
+        </p>
+    </div>
+
     <!--h2>карта | список</h2-->
     <!--div id="legend"></div-->
 
@@ -60,10 +73,12 @@
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/queue.v1.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/topojson.v1.min.js"></script>
-    <script src="/js/choropleth.js"></script>
-    <script src="/js/jquery-3.2.1.slim.min.js"></script>
+    <!--script src="/js/jquery-3.2.1.slim.min.js"></script-->
+    <script src="/js/jquery-3.2.1.js"></script>
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/choropleth.js"></script>
+    <script src="/js/script.js"></script>
     <script src="/js/bot.js"></script>
 
   </body>

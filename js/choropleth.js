@@ -82,7 +82,9 @@ function ready(error, map, data) {
       .style("opacity", 0);
   })
   .on("click", function() {
-    alert("Тут будет отображение div с графиками");
+    $('#overlay').fadeToggle('fast',function(){
+        $('#box').animate({'right':'0'},500);
+    });
   })
 
   // добавление городов на карту
