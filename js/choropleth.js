@@ -109,6 +109,7 @@ function ready(error, map, data) {
         $('#box').animate({'right':'0'},500);
     });
     $('#name_region_head').text( nameById[d.properties.ISO_2] );
+    Highcharts.chart( 'first-graph', updateDataGraph( nameById[d.properties.ISO_2] ) );
   })
 
   // добавление городов на карту

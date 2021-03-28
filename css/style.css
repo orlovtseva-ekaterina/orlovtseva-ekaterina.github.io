@@ -106,3 +106,13 @@ div.tooltip_d3 {
 #range-row{
   margin-top:5%;
 }
+
+.selected-value{
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+#mapType {
+  font-size: 1.1rem;
+  color: rgba(0,0,0,.9);
+}

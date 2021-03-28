@@ -1,10 +1,13 @@
-function updateDataGraph( data=null ){
+function updateDataGraph( nameRegion, data=null ){
   let firstGraphParam = {
       chart: {
           type: 'column'
       },
       title: {
-          text: 'Динамика изменения уровня загразнения окружающей среды'
+          text: 'Динамика изменения уровня загразнения окружающей среды: '+ nameRegion
+      },
+      subtitle: {
+          text: 'Данные по качеству атмосферного воздуха взяты из ежегодного  отчета какой-то гос.структуры.</br> Данные по качеству водных объектов тоже взяты из какого-то отчета какой-то гос.структуры.'
       },
       xAxis: {
           categories: [
@@ -24,7 +27,7 @@ function updateDataGraph( data=null ){
           }
       },
       tooltip: {
-          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+          headerFormat: '<span style="font-size:0.8rem">{point.key}</span><table>',
           pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
               '<td style="padding:0"><b>{point.y:.1f} %</b></td></tr>',
           footerFormat: '</table>',
@@ -55,14 +58,6 @@ function updateDataGraph( data=null ){
   return firstGraphParam;
 }
 
-
-
-$(document).ready(function(){
-  Highcharts.chart( 'first-graph', updateDataGraph() );
-  //Highcharts.chart( 'second-graph', firstGraphParam );
-  //Highcharts.chart( 'third-graph', firstGraphParam );
-});
-
 $(document).on('click', '#boxclose', function(){
   $('#overlay').fadeToggle('fast',function(){
       $('#box').animate({'right':'-101vw'},500);
@@ -77,6 +72,8 @@ $(document).on('click', '.overlay', function(){
 
 $(document).on('change','#yearRange',function(){
   let valOnRange = $('#yearRange').val();
+  $(this).next().children().children().removeClass('selected-value');
+  $('#'+valOnRange).addClass('selected-value');
   console.log(valOnRange);
 });
 
