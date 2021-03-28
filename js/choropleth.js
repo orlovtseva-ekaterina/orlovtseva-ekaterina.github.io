@@ -75,7 +75,7 @@ function ready(error, map, data) {
   });
 
 //////////////////////
-
+/*
   var datashow = {date: [], air: [], water: []};
   data.forEach( function(d) {
     console.log(d.iso3166_alpha2);
@@ -86,7 +86,7 @@ function ready(error, map, data) {
     }
   });
   console.log(datashow);
-
+*/
 
 
   //Drawing Choropleth
