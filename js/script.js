@@ -4,7 +4,7 @@ function updateDataGraph( nameRegion, data=null ){
           type: 'column'
       },
       title: {
-          text: 'Динамика изменения уровня загразнения окружающей среды: '+ nameRegion
+          text: 'Динамика изменения уровня загрязнения окружающей среды: '+ nameRegion
       },
       subtitle: {
           text: 'Данные по качеству атмосферного воздуха взяты из ежегодного  отчета какой-то гос.структуры.</br> Данные по качеству водных объектов тоже взяты из какого-то отчета какой-то гос.структуры.'
@@ -54,6 +54,9 @@ function updateDataGraph( nameRegion, data=null ){
   return firstGraphParam;
 }
 
+$(document).ready(function(){
+  parseDataFromCSV();
+});
 $(document).on('click', '#boxclose', function(){
   $('#overlay').fadeToggle('fast',function(){
       $('#box').animate({'right':'-101vw'},500);
@@ -77,3 +80,11 @@ $(document).on('change', '#mapType', function(){
   let mapType = $('#mapType').val();
   console.log(mapType);
 });
+
+function parseDataFromCSV(){
+  $.get( "../data/envdataset.csv", function( data ) {
+      alert( "Load was performed." );
+      console.log(data);
+      console.log($.csv.toObjects(data));
+  });
+}
