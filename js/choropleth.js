@@ -72,16 +72,22 @@ function ready(error, map, data) {
       rateById[d.iso3166_alpha2] = Math.round(d.air_total*100);
     }
     nameById[d.iso3166_alpha2] = d.name_ru;
-
-    if(jsonObj[d.iso3166_alpha2] == null) {
-      jsonObj[d.iso3166_alpha2] = {}
-    }
-    jsonObj[d.iso3166_alpha2]['ru'] = d.name_ru;
-    //jsonObj[d.iso3166_alpha2]['date'].push(d.date);
-    //jsonObj[d.iso3166_alpha2]['air'].push(d.air_total*100);
-    //jsonObj[d.iso3166_alpha2]['water'].push(d.water_total*100);
-
   });
+
+//////////////////////
+
+  var datashow = {date: [], air: [], water: []};
+  data.forEach( function(d) {
+    console.log(d.iso3166_alpha2);
+    if(d.iso3166_alpha2 == d.properties.ISO_2) {
+      datashow['date'].push(d.date)
+      datashow['air'].push(d.air_total*100);
+      datashow['water'].push(d.water_total*100);
+    }
+  });
+  console.log(datashow);
+
+
 
   //Drawing Choropleth
   features = topojson.feature(map, map.objects.name);
@@ -121,6 +127,7 @@ function ready(error, map, data) {
     $('#overlay').fadeToggle('fast',function(){
         $('#box').animate({'right':'0'},500);
     });
+
     $('#name_region_head').text( nameById[d.properties.ISO_2] );
     Highcharts.chart( 'first-graph', updateDataGraph( nameById[d.properties.ISO_2] ) );
   })
