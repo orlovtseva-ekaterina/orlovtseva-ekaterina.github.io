@@ -72,5 +72,11 @@ $(document).on('change','#yearRange',function(){
 
 $(document).on('change', '#mapType', function(){
   let mapType = $('#mapType').val();
-  console.log(mapType);
+  if( mapType == 'air' ){
+    $('#my_dataviz2').hide();
+    $('#my_dataviz1').show();
+  } elseif( mapType == 'water' ){
+    $('#my_dataviz1').hide();
+    $('#my_dataviz2').show();
+  }
 });
