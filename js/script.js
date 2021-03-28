@@ -10,11 +10,7 @@ function updateDataGraph( nameRegion, data=null ){
           text: 'Данные по качеству атмосферного воздуха взяты из ежегодного  отчета какой-то гос.структуры.</br> Данные по качеству водных объектов тоже взяты из какого-то отчета какой-то гос.структуры.'
       },
       xAxis: {
-          categories: [
-              '2017',
-              '2018',
-              '2019',
-          ],
+          categories: ['2017','2018','2019'],//будет data.date
           title:{
             text:'Год'
           }
@@ -43,12 +39,12 @@ function updateDataGraph( nameRegion, data=null ){
       series: [{
           name: 'Атмосферный воздух',
           color:'#99CCFF',
-          data: [49.9, 71.5, 90.4]
+          data: [49.9, 71.5, 90.4]//будет data.air_total
 
       }, {
           name: 'Водные объекты',
           color:'#0066CC',
-          data: [83.6, 78.8, 98.5]
+          data: [83.6, 78.8, 98.5]//будет data.water_total
 
       }],
       credits: {
