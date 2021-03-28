@@ -233,7 +233,7 @@ function ready(error, map, data) {
     if(rateById_water[d.properties.ISO_2]<33) {
       level = 'Низкий уровень загрязнения';
     }
-    if(rateById_water[d.properties.ISO_2]>=33 && rateById[d.properties.ISO_2]<67) {
+    if(rateById_water[d.properties.ISO_2]>=33 && rateById_water[d.properties.ISO_2]<67) {
       level = 'Повышенный уровень загрязнения';
     }
     if(rateById_water[d.properties.ISO_2]>=67) {
@@ -251,7 +251,7 @@ function ready(error, map, data) {
     d3.select(this)
       .transition().duration(300)
       .style("opacity", 0.7);
-    div.transition().duration(300)
+    div2.transition().duration(300)
       .style("opacity", 0);
   })
   .on("click", function(d) {
