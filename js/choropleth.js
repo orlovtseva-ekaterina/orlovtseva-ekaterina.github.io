@@ -1,5 +1,7 @@
 var jsonObj = {};
 
+function getColor() {
+}
 
 let mapWidthMultiplier, fontWeightLegent;
 // параметры в зависимости от размера и соотношения экрана
@@ -103,7 +105,14 @@ function ready(error, map, data) {
     .enter().append("path")
     .attr("d", path)
     .style("fill", function(d) {
-      return color(rateById[d.properties.ISO_2]);  // <<
+      // if data are missed then grey color
+      if(rateById[d.properties.ISO_2] == null) {
+        return '#eeeeee';
+      }
+      // else use palette
+      else {
+        return color(rateById[d.properties.ISO_2]);  // <<
+      }
     })
     .style("opacity", 0.8)
 
@@ -112,7 +121,17 @@ function ready(error, map, data) {
     d3.select(this).transition().duration(300).style("opacity", 1);
     div.transition().duration(300).style("opacity", 1)
     // вывод значений из датасета в подсказку
-    div.html(nameById[d.properties.ISO_2] + "<br/>" + "<span style='font-size:18px;font-weight:700'>" + rateById[d.properties.ISO_2] + "%" + "</span>")
+    var level = 'Нет данных измерений';
+    if(rateById[d.properties.ISO_2]<33) {
+      level = 'Низкий уровень загрязнения';
+    }
+    if(rateById[d.properties.ISO_2]>=33 && rateById[d.properties.ISO_2]<67) {
+      level = 'Повышенный уровень загрязнения';
+    }
+    if(rateById[d.properties.ISO_2]>=67) {
+      level = 'Высокий уровень загрязнения';
+    }
+    div.html(nameById[d.properties.ISO_2] + "<br/>" + "<span style='font-size:16px;font-weight:700'>" + level + "</span>")
       .style("left", (d3.event.layerX) + "px")
       .style("top", (d3.event.layerY - 30) + "px");
   })
