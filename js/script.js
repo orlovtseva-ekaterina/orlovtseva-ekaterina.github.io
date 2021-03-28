@@ -1,14 +1,10 @@
 function updateDataGraph( nameRegion, data ){
-  console.log(data);
   let firstGraphParam = {
       chart: {
           type: 'column'
       },
       title: {
           text: 'Динамика изменения уровня загрязнения окружающей среды: '+ nameRegion
-      },
-      subtitle: {
-          text: 'Данные по качеству атмосферного воздуха взяты из ежегодного  отчета какой-то гос.структуры.</br> Данные по качеству водных объектов тоже взяты из какого-то отчета какой-то гос.структуры.'
       },
       xAxis: {
           categories: data.date,//['2017','2018','2019']
@@ -54,10 +50,6 @@ function updateDataGraph( nameRegion, data ){
   };
   return firstGraphParam;
 }
-
-$(document).ready(function(){
-  //dataForGraphHighcharts = parseDataFromCSV();
-});
 
 $(document).on('click', '#boxclose', function(){
   $('#overlay').fadeToggle('fast',function(){
