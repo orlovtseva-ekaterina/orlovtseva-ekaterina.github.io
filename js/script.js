@@ -1,4 +1,5 @@
-function updateDataGraph( nameRegion, data=null ){
+function updateDataGraph( nameRegion, data ){
+  console.log(data);
   let firstGraphParam = {
       chart: {
           type: 'column'
@@ -10,7 +11,7 @@ function updateDataGraph( nameRegion, data=null ){
           text: 'Данные по качеству атмосферного воздуха взяты из ежегодного  отчета какой-то гос.структуры.</br> Данные по качеству водных объектов тоже взяты из какого-то отчета какой-то гос.структуры.'
       },
       xAxis: {
-          categories: ['2017','2018','2019'],//будет data.date
+          categories: data.date,//['2017','2018','2019']
           title:{
             text:'Год'
           }
@@ -39,12 +40,12 @@ function updateDataGraph( nameRegion, data=null ){
       series: [{
           name: 'Атмосферный воздух',
           color:'#99CCFF',
-          data: [49.9, 71.5, 90.4]//будет data.air_total
+          data: data.air_total//будет data.air_total[49.9, 71.5, 90.4]
 
       }, {
           name: 'Водные объекты',
           color:'#0066CC',
-          data: [83.6, 78.8, 98.5]//будет data.water_total
+          data: data.water_total//будет data.water_total[83.6, 78.8, 98.5]
 
       }],
       credits: {
@@ -55,8 +56,9 @@ function updateDataGraph( nameRegion, data=null ){
 }
 
 $(document).ready(function(){
-  parseDataFromCSV();
+  //dataForGraphHighcharts = parseDataFromCSV();
 });
+
 $(document).on('click', '#boxclose', function(){
   $('#overlay').fadeToggle('fast',function(){
       $('#box').animate({'right':'-101vw'},500);
@@ -80,11 +82,3 @@ $(document).on('change', '#mapType', function(){
   let mapType = $('#mapType').val();
   console.log(mapType);
 });
-
-function parseDataFromCSV(){
-  $.get( "../data/envdataset.csv", function( data ) {
-      alert( "Load was performed." );
-      console.log(data);
-      console.log($.csv.toObjects(data));
-  });
-}
