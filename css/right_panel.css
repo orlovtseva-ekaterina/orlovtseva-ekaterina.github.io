@@ -21,7 +21,13 @@
     -moz-box-shadow: 0 1px 5px #333;
     -webkit-box-shadow: 0 1px 5px #333;
     z-index: 9999;
-    /*overflow-y: scroll;*/
+    overflow-y: scroll;
+}
+
+.box p{
+  font-size: 0.8rem;
+  padding-right: 15px;
+  padding-left: 15px;
 }
 
 .close {
@@ -65,6 +71,9 @@
     .box {
       width: 100%;
       right: -101vw;
+    }
+    .box p{
+      font-size: 0.6rem;
     }
 }
 
