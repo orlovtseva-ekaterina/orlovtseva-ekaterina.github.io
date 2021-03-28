@@ -29,7 +29,7 @@ const height = width/2; //500;
 // color palette
 var color = d3.scale.linear()
     .domain([0, 50, 100])
-    .range(["red", "orange", "green"]);
+    .range(["green", "orange", "red"]);
 
 // добавление div для всплывающих подсказок
 var div1 = d3.select("#my_dataviz1")
