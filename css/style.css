@@ -26,7 +26,12 @@ h2 {
   margin-bottom: -50px;
 }*/
 
-#my_dataviz path {
+#my_dataviz1 path {
+  stroke: white;
+  stroke-width: 1px;
+}
+
+#my_dataviz2 path {
   stroke: white;
   stroke-width: 1px;
 }

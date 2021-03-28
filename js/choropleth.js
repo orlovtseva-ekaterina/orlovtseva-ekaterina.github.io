@@ -1,7 +1,6 @@
 var jsonObj = {};
 
-function getColor() {
-}
+let dataForGraphHighcharts = parseDataFromCSV();
 
 let mapWidthMultiplier, fontWeightLegent;
 // параметры в зависимости от размера и соотношения экрана
@@ -61,6 +60,27 @@ queue()
   .defer(d3.csv, "/data/envdataset.csv")
   .await(ready);
 
+
+function parseDataFromCSV(){
+  let dataJSON = {};
+  $.get( "../data/envdataset.csv", function( data ) {
+      let dataRaw = $.csv.toObjects(data);
+      for( key in dataRaw ){
+        if( !(dataRaw[key].iso3166_alpha2 in dataJSON) ){
+          dataJSON[ dataRaw[key].iso3166_alpha2 ] = {
+            date:[],
+            water_total:[],
+            air_total:[]
+          }
+        }
+        dataJSON[ dataRaw[key].iso3166_alpha2 ].date.push( dataRaw[key]['date'] );
+        dataJSON[ dataRaw[key].iso3166_alpha2 ].water_total.push( dataRaw[key]['water_total'] * 100 );
+        dataJSON[ dataRaw[key].iso3166_alpha2 ].air_total.push( dataRaw[key]['air_total'] * 100 );
+      }
+  });
+  return dataJSON;
+}
+
 // отображение картограммы
 function ready(error, map, data) {
 
@@ -75,20 +95,6 @@ function ready(error, map, data) {
     }
     nameById[d.iso3166_alpha2] = d.name_ru;
   });
-
-//////////////////////
-/*
-  var datashow = {date: [], air: [], water: []};
-  data.forEach( function(d) {
-    console.log(d.iso3166_alpha2);
-    if(d.iso3166_alpha2 == d.properties.ISO_2) {
-      datashow['date'].push(d.date)
-      datashow['air'].push(d.air_total*100);
-      datashow['water'].push(d.water_total*100);
-    }
-  });
-  console.log(datashow);
-*/
 
 
   //Drawing Choropleth
@@ -131,7 +137,11 @@ function ready(error, map, data) {
     if(rateById[d.properties.ISO_2]>=67) {
       level = 'Высокий уровень загрязнения';
     }
-    div.html(nameById[d.properties.ISO_2] + "<br/>" + "<span style='font-size:16px;font-weight:700'>" + level + "</span>")
+    var percent = '';
+    if(rateById[d.properties.ISO_2]>=0) {
+      percent = " ("+rateById[d.properties.ISO_2]+"%)";
+    }
+    div.html(nameById[d.properties.ISO_2] + "<br/>" + "<span style='font-size:16px;font-weight:700'>" + level + "</span>"+percent)
       .style("left", (d3.event.layerX) + "px")
       .style("top", (d3.event.layerY - 30) + "px");
   })
@@ -148,7 +158,7 @@ function ready(error, map, data) {
     });
 
     $('#name_region_head').text( nameById[d.properties.ISO_2] );
-    Highcharts.chart( 'first-graph', updateDataGraph( nameById[d.properties.ISO_2] ) );
+    Highcharts.chart( 'first-graph', updateDataGraph( nameById[d.properties.ISO_2], dataForGraphHighcharts[d.properties.ISO_2] ) );
   })
 
   // добавление городов на карту
