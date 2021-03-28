@@ -75,7 +75,7 @@ $(document).on('change', '#mapType', function(){
   if( mapType == 'air' ){
     $('#my_dataviz2').hide();
     $('#my_dataviz1').show();
-  } elseif( mapType == 'water' ){
+  } else if( mapType == 'water' ){
     $('#my_dataviz1').hide();
     $('#my_dataviz2').show();
   }
