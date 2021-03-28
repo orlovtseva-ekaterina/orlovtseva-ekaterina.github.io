@@ -1,3 +1,6 @@
+var jsonObj = {};
+
+
 let mapWidthMultiplier, fontWeightLegent;
 // параметры в зависимости от размера и соотношения экрана
 if( window.innerWidth >= 1025 ){
@@ -62,12 +65,22 @@ function ready(error, map, data) {
   var rateById = {};
   var nameById = {};
 
+
   // fill arrays by data from CSV file
-  data.forEach(function(d) {
+  data.forEach( function(d) {
     if(d.water_total != 0) {
-      rateById[d.iso3166_alpha2] = Math.round(d.water_total*100);
+      rateById[d.iso3166_alpha2] = Math.round(d.air_total*100);
     }
     nameById[d.iso3166_alpha2] = d.name_ru;
+
+    if(jsonObj[d.iso3166_alpha2] == null) {
+      jsonObj[d.iso3166_alpha2] = {}
+    }
+    jsonObj[d.iso3166_alpha2]['ru'] = d.name_ru;
+    //jsonObj[d.iso3166_alpha2]['date'].push(d.date);
+    //jsonObj[d.iso3166_alpha2]['air'].push(d.air_total*100);
+    //jsonObj[d.iso3166_alpha2]['water'].push(d.water_total*100);
+
   });
 
   //Drawing Choropleth
