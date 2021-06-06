@@ -1,4 +1,37 @@
-function updateDataGraph( nameRegion, data ){
+let params = {
+  life_expectancy: "Ожидаемая продолжительность жизни при рождении, лет",
+  cash_income_2020: "Денежные доходы (2020), рубль",
+  real_disposable_cash_income_2020: "Реальные располагаемые денежные доходы (2020), проценты",
+  gini_coefficient_2020: "Коэффициент Джини (2020)",
+  funds_ratio_2020: "Коэффициент фондов (2020)",
+  cash_income_deficit_2020: "Дефицит денежного дохода (2020), проценты",
+  decile_ratio_2019: "Децильный коэффициент  (2019)",
+  population_with_monetary_incomes_below_the_subsistence_level: "Численность населения с денежными доходами ниже величины прожиточного минимума, проценты",
+  healthy_life_expectancy_2019: "Ожидаемая продолжительность здоровой жизни (2019), лет",
+  number_of_higher_education_organizations: "Число самостоятельных организаций высшего образования (бакалавриат, специалитет, магистратура), штук",
+  number_of_higher_education_students: "Численность студентов высшего образования (бакалавриат, специалитет, магистратура), человек",
+  indices_of_economy_2019: "Индексы физического объема валового регионального продукта и валовой добавленной стоимости (2019), проценты",
+  environmental_quality_2020: "Качество окружающей среды (2020), проценты"
+}
+/*
+let checked = {
+  cash_income_2020: "on",
+  cash_income_deficit_2020: "on",
+  decile_ratio_2019: "on",
+  environmental_quality_2020: "on",
+  funds_ratio_2020: "on",
+  gini_coefficient_2020: "on",
+  healthy_life_expectancy_2019: "on",
+  indices_of_economy_2019: "on",
+  life_expectancy: "on",
+  number_of_higher_education_organizations: "on",
+  number_of_higher_education_students: "on",
+  population_with_monetary_incomes_below_the_subsistence_level: "on",
+  real_disposable_cash_income_2020: "on"
+};
+*/
+
+function updateDataGraph( nameRegion, data ) {
   let firstGraphParam = {
       chart: {
           type: 'column'
@@ -75,8 +108,40 @@ $(document).on('change', '#mapType', function(){
   if( mapType == 'air' ){
     $('#my_dataviz2').hide();
     $('#my_dataviz1').show();
-  } else if( mapType == 'water' ){
+  }
+  else if( mapType == 'water' ){
     $('#my_dataviz1').hide();
     $('#my_dataviz2').show();
   }
 });
+
+
+$(document).on('click', '#save_changes', function() {
+  checked = {};
+  $('#modal_form input:checkbox:checked').each( function() {
+    checked[$(this).attr('id')] = $(this).val();
+  });
+  $('#exampleModal').modal('hide');
+});
+
+function createTable(data, region_code) {
+
+  let checked = {};
+  $('#modal_form input:checkbox:checked').each( function() {
+    checked[$(this).attr('id')] = $(this).val();
+  });
+
+  $("#table_body").children().remove();
+
+  for(key in data[region_code]) {
+    if(key == 'name_ru') {
+      continue
+    }
+    if(Object.keys(checked).includes(key)) {
+      $("#table_body").append("<tr><td>"+params[key]+"</td><td>"+data[region_code][key]+"</td><td>"+data['RU'][key]+"</td></tr>");
+    }
+  }
+}
+
+
+

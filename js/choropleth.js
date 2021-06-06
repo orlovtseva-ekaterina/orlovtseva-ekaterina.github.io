@@ -3,55 +3,45 @@ var jsonObj = {};
 let dataForGraphHighcharts = parseDataFromCSV();
 
 let mapWidthMultiplier, fontWeightLegent;
+
 // параметры в зависимости от размера и соотношения экрана
 if( window.innerWidth >= 1025 ){
   // множитель ширины карты
   mapWidthMultiplier = 0.8;
   // размер шрифта подписи легенды
   fontWeightLegent = 0.8;
-} else {
+}
+else {
   // множитель ширины карты
   mapWidthMultiplier = 0.9;
   // размер шрифта подписи легенды
   fontWeightLegent = 0.6;
 }
 
-if( window.innerHeight >= 769 ){
-  $('#legend-row').css('margin-top','-9%');/*-15vh*/
-} else {
-  $('#legend-row').css('margin-top','-13%');/*-12vh*/
+if( window.innerHeight >= 769 ) {
+  $('#legend-row').css('margin-top','-9%');//-15vh
+}
+else {
+  $('#legend-row').css('margin-top','-13%');//-12vh
 }
 
-// map dimension
+// shape of map
 const width = mapWidthMultiplier*window.innerWidth; //1000;
 const height = width/2; //500;
 
 // color palette
 var color = d3.scale.linear()
-    .domain([0, 50, 100])
-    .range(["green", "orange", "red"]);
+    .domain([77, 83])
+    .range(["blue", "red"]);
 
-// добавление div для всплывающих подсказок
+// add div for messages
 var div1 = d3.select("#my_dataviz1")
   .append("div")
   .attr("class", "tooltip_d3")
   .style("opacity", 0);
 
-// добавляем SVG для карты
+// add SVG
 var svg1 = d3.select("#my_dataviz1")
-  .append("svg")
-  .attr("width", width)
-  .attr("height", height)
-  .style("margin", "10px auto");
-
-// добавление div для всплывающих подсказок
-var div2 = d3.select("#my_dataviz2")
-  .append("div")
-  .attr("class", "tooltip_d3")
-  .style("opacity", 0);
-
-// добавляем SVG для карты
-var svg2 = d3.select("#my_dataviz2")
   .append("svg")
   .attr("width", width)
   .attr("height", height)
@@ -62,57 +52,64 @@ var projection = d3.geo.albers()
   .rotate([-105, 0])
   .center([-10, 65])
   .parallels([52, 64])
-  .scale(0.7*width) // масштаб картограммы внутри svg элемента
+  .scale(0.7*width)
   .translate([width/2, height/2]);
 
 var path = d3.geo.path().projection(projection);
 
-// чтение данных из JSON и CSV-файлов
+// load data from JSON and CSV files
 queue()
-  .defer(d3.json, "/data/russia.json")
-  .defer(d3.csv, "/data/envdataset.csv")
+  .defer(d3.json, "../data/russia.json?v=1")
+  .defer(d3.csv, "../data/dataset.csv?v=1")
   .await(ready);
 
 
-function parseDataFromCSV(){
+function parseDataFromCSV() {
   let dataJSON = {};
-  $.get( "../data/envdataset.csv", function( data ) {
+  $.get("../data/dataset.csv", function(data) {
       let dataRaw = $.csv.toObjects(data);
       for( key in dataRaw ){
         if( !(dataRaw[key].iso3166_alpha2 in dataJSON) ){
           dataJSON[ dataRaw[key].iso3166_alpha2 ] = {
-            date:[],
-            water_total:[],
-            air_total:[]
+            name_ru: dataRaw[key]['name_ru'],
+            life_expectancy: dataRaw[key]['life_expectancy'],
+            cash_income_2020: dataRaw[key]['cash_income_2020'],
+            real_disposable_cash_income_2020: dataRaw[key]['real_disposable_cash_income_2020'],
+            gini_coefficient_2020: dataRaw[key]['gini_coefficient_2020'],
+            funds_ratio_2020: dataRaw[key]['funds_ratio_2020'],
+            cash_income_deficit_2020: dataRaw[key]['cash_income_deficit_2020'],
+            decile_ratio_2019: dataRaw[key]['decile_ratio_2019'],
+            population_with_monetary_incomes_below_the_subsistence_level: dataRaw[key]['population_with_monetary_incomes_below_the_subsistence_level'],
+            healthy_life_expectancy_2019: dataRaw[key]['healthy_life_expectancy_2019'],
+            number_of_higher_education_organizations: dataRaw[key]['number_of_higher_education_organizations'],
+            number_of_higher_education_students: dataRaw[key]['number_of_higher_education_students'],
+            indices_of__economy_2019: dataRaw[key]['indices_of__economy_2019'],
+            environmental_quality_2020: dataRaw[key]['environmental_quality_2020']
           }
         }
-        dataJSON[ dataRaw[key].iso3166_alpha2 ].date.push( dataRaw[key]['date'] );
-        dataJSON[ dataRaw[key].iso3166_alpha2 ].water_total.push( dataRaw[key]['water_total'] * 100 );
-        dataJSON[ dataRaw[key].iso3166_alpha2 ].air_total.push( dataRaw[key]['air_total'] * 100 );
       }
   });
+
+  //console.log(dataJSON);
+
   return dataJSON;
 }
 
-// отображение картограммы
+
+
+// draw the map
 function ready(error, map, data) {
 
-  var rateById_air = {};
-  var rateById_water = {};
-  var nameById = {};
-
+  var values = {};
+  var names = {};
 
   // fill arrays by data from CSV file
   data.forEach( function(d) {
-    if(d.water_total != 0) {
-      rateById_air[d.iso3166_alpha2] = Math.round(d.air_total*100);
-      rateById_water[d.iso3166_alpha2] = Math.round(d.water_total*100);
-    }
-    nameById[d.iso3166_alpha2] = d.name_ru;
+    values[d.iso3166_alpha2] = d.life_expectancy;
+    names[d.iso3166_alpha2] = d.name_ru;
   });
 
-
-  //Drawing Choropleth
+  // drawing choropleth
   features = topojson.feature(map, map.objects.name);
   _Global_features = features;
 
@@ -120,46 +117,31 @@ function ready(error, map, data) {
   svg1.append("g")
     .attr("class", "region")
     .selectAll("path")
-    // .data(topojson.object(map, map.objects.russia).geometries)
-    // .data(topojson.feature(map, map.objects.russia).features) //<-- in case topojson.v1.js
     .data(features.features)
     .enter().append("path")
     .attr("d", path)
     .style("fill", function(d) {
       // if data are missed then grey color
-      if(rateById_air[d.properties.ISO_2] == null) {
+      if(values[d.properties.iso] == null) {
         return '#eeeeee';
       }
       // else use palette
       else {
-        return color(rateById_air[d.properties.ISO_2]);  // <<
+        return color(values[d.properties.iso]);
       }
     })
     .style("opacity", 0.8)
 
-  // add event listners
+  // event listner for mouseover
   .on("mouseover", function(d) {
     d3.select(this).transition().duration(300).style("opacity", 1);
     div1.transition().duration(300).style("opacity", 1)
-    // вывод значений из датасета в подсказку
-    var level = 'Нет данных измерений';
-    if(rateById_air[d.properties.ISO_2]<33) {
-      level = 'Низкий уровень загрязнения';
-    }
-    if(rateById_air[d.properties.ISO_2]>=33 && rateById_air[d.properties.ISO_2]<67) {
-      level = 'Повышенный уровень загрязнения';
-    }
-    if(rateById_air[d.properties.ISO_2]>=67) {
-      level = 'Высокий уровень загрязнения';
-    }
-    var percent = '';
-    if(rateById_air[d.properties.ISO_2]>=0) {
-      percent = " ("+rateById_air[d.properties.ISO_2]+"%)";
-    }
-    div1.html(nameById[d.properties.ISO_2] + "<br/>" + "<span style='font-size:16px;font-weight:700'>" + level + "</span>"+percent)
+    div1.html(names[d.properties.iso] + "<br/><span style='font-size:16px;font-weight:700'>" + values[d.properties.iso] + "</span>")
       .style("left", (d3.event.layerX) + "px")
       .style("top", (d3.event.layerY - 30) + "px");
   })
+
+  // event listner for mouseout
   .on("mouseout", function() {
     d3.select(this)
       .transition().duration(300)
@@ -167,139 +149,18 @@ function ready(error, map, data) {
     div1.transition().duration(300)
       .style("opacity", 0);
   })
+
+  // event listner for click
   .on("click", function(d) {
-    $('#overlay').fadeToggle('fast',function(){
-        $('#box').animate({'right':'0'},500);
+    $("#overlay").fadeToggle('fast',function(){
+      $("#box").animate({"right":"0"}, 500);
     });
-
-    $('#name_region_head').text( nameById[d.properties.ISO_2] );
-    Highcharts.chart( 'first-graph', updateDataGraph( nameById[d.properties.ISO_2], dataForGraphHighcharts[d.properties.ISO_2] ) );
+    $("#name_region_head").text(names[d.properties.iso]);
+    createTable(dataForGraphHighcharts, d.properties.iso);
   })
-
-  // добавление городов на карту
-  d3.tsv("/data/cities.tsv", function(error, data) {
-    // создание массива данных о городах
-    var city = svg1.selectAll("g.city")
-      .data(data)
-      .enter()
-      .append("g")
-      .attr("class", "city")
-      .attr("transform", function(d) {
-        return "translate(" + projection([d.lon, d.lat]) + ")";
-      });
-    // добавление точек на карту
-    city.append("circle")
-      .attr("r", 2)
-      .style("fill", "red")
-      .style("opacity", 0.75);
-    // добавление названий городов на карту
-    city.append("text")
-      .attr("x", 5)
-      .text(function(d) {
-        return d.City;
-      });
-  });
-
-
-//////////////////////////////// WATER /////////////////////////
-
-  // добавление
-  svg2.append("g")
-    .attr("class", "region")
-    .selectAll("path")
-    // .data(topojson.object(map, map.objects.russia).geometries)
-    // .data(topojson.feature(map, map.objects.russia).features) //<-- in case topojson.v1.js
-    .data(features.features)
-    .enter().append("path")
-    .attr("d", path)
-    .style("fill", function(d) {
-      // if data are missed then grey color
-      if(rateById_water[d.properties.ISO_2] == null) {
-        return '#eeeeee';
-      }
-      // else use palette
-      else {
-        return color(rateById_water[d.properties.ISO_2]);  // <<
-      }
-    })
-    .style("opacity", 0.8)
-
-  // add event listners
-  .on("mouseover", function(d) {
-    d3.select(this).transition().duration(300).style("opacity", 1);
-    div2.transition().duration(300).style("opacity", 1)
-    // вывод значений из датасета в подсказку
-    var level = 'Нет данных измерений';
-    if(rateById_water[d.properties.ISO_2]<33) {
-      level = 'Низкий уровень загрязнения';
-    }
-    if(rateById_water[d.properties.ISO_2]>=33 && rateById_water[d.properties.ISO_2]<67) {
-      level = 'Повышенный уровень загрязнения';
-    }
-    if(rateById_water[d.properties.ISO_2]>=67) {
-      level = 'Высокий уровень загрязнения';
-    }
-    var percent = '';
-    if(rateById_water[d.properties.ISO_2]>=0) {
-      percent = " ("+rateById_water[d.properties.ISO_2]+"%)";
-    }
-    div2.html(nameById[d.properties.ISO_2] + "<br/>" + "<span style='font-size:16px;font-weight:700'>" + level + "</span>"+percent)
-      .style("left", (d3.event.layerX) + "px")
-      .style("top", (d3.event.layerY - 30) + "px");
-  })
-  .on("mouseout", function() {
-    d3.select(this)
-      .transition().duration(300)
-      .style("opacity", 0.7);
-    div2.transition().duration(300)
-      .style("opacity", 0);
-  })
-  .on("click", function(d) {
-    $('#overlay').fadeToggle('fast',function(){
-        $('#box').animate({'right':'0'},500);
-    });
-
-    $('#name_region_head').text( nameById[d.properties.ISO_2] );
-    Highcharts.chart( 'first-graph', updateDataGraph( nameById[d.properties.ISO_2], dataForGraphHighcharts[d.properties.ISO_2] ) );
-  })
-
-  // добавление городов на карту
-  d3.tsv("/data/cities.tsv", function(error, data) {
-    // создание массива данных о городах
-    var city = svg2.selectAll("g.city")
-      .data(data)
-      .enter()
-      .append("g")
-      .attr("class", "city")
-      .attr("transform", function(d) {
-        return "translate(" + projection([d.lon, d.lat]) + ")";
-      });
-    // добавление точек на карту
-    city.append("circle")
-      .attr("r", 2)
-      .style("fill", "red")
-      .style("opacity", 0.75);
-    // добавление названий городов на карту
-    city.append("text")
-      .attr("x", 5)
-      .text(function(d) {
-        return d.City;
-      });
-  });
-
-
-
-
-
-
-
-
-
-
-
-
 
 };
+
 
 
 /*
@@ -309,6 +170,8 @@ var colorScale = d3.scale.linear()
   .range(['green', 'orange', 'red']); //Цвет, от какого и до какого нужно сделать растяжку
 */
 
+
+/*
 let widthLegendRow = $('#legend-row').width() * 35 / 100;
 // append a defs (for definition) element to your SVG
 var svgLegend = d3.select('#legend').append('svg')
@@ -385,3 +248,4 @@ svgLegend
   .append("g")
   .attr("transform", "translate(10, 35)")
   .call(axisLeg);
+*/

@@ -30,7 +30,7 @@
   padding-left: 15px;
 }
 
-.close {
+#box .close {
   position: absolute;
   right: 20px;
   top: 4px;
@@ -39,7 +39,8 @@
   opacity: 1;
   z-index:9;
 }
-.close:before, .close:after {
+
+#box .close:before, #box .close:after {
   position: absolute;
   left: 15px;
   content: ' ';
@@ -47,10 +48,10 @@
   width: 2px;
   background-color: #333;
 }
-.close:before {
+#box .close:before {
   transform: rotate(45deg);
 }
-.close:after {
+#box .close:after {
   transform: rotate(-45deg);
 }
 
