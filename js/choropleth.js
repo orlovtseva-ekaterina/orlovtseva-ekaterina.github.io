@@ -94,7 +94,6 @@ var color = d3.scale.linear()
 function showMap() {
 
   if(Object.keys(dataForGraphHighcharts).length == 0) {
-    console.log('Еще нет данных');
     setTimeout(showMap, 500);
     return;
   }
