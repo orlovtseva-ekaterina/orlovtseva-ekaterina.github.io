@@ -17,7 +17,7 @@ function parseDataFromCSV() {
             healthy_life_expectancy_2019: dataRaw[key]['healthy_life_expectancy_2019'],
             number_of_higher_education_organizations: dataRaw[key]['number_of_higher_education_organizations'],
             number_of_higher_education_students: dataRaw[key]['number_of_higher_education_students'],
-            indices_of__economy_2019: dataRaw[key]['indices_of__economy_2019'],
+            indices_of_economy_2019: dataRaw[key]['indices_of_economy_2019'],
             environmental_quality_2020: dataRaw[key]['environmental_quality_2020']
           }
         }
@@ -29,10 +29,11 @@ function parseDataFromCSV() {
   return dataJSON;
 }
 
+let dataForGraphHighcharts = parseDataFromCSV();
 
 var jsonObj = {};
 
-let dataForGraphHighcharts = parseDataFromCSV();
+//console.log(dataForGraphHighcharts);
 
 let mapWidthMultiplier, fontWeightLegent;
 
@@ -86,15 +87,35 @@ var path = d3.geo.path().projection(projection);
 
 // default color palette
 var color = d3.scale.linear()
-  .domain([77, 83])
+  .domain([0, 100])
   .range(["blue", "red"]);
 
 
 function showMap() {
 
+  if(Object.keys(dataForGraphHighcharts).length == 0) {
+    console.log('Еще нет данных');
+    setTimeout(showMap, 500);
+    return;
+  }
+
+  let minVal = 1000000000.0;
+  let maxVal = -1000000000.0;
+  for(key in dataForGraphHighcharts) {
+    if(key == 'RU') {
+      continue;
+    }
+    if(dataForGraphHighcharts[key][mapType] == "") {
+      continue;
+    }
+    val = 1.0*dataForGraphHighcharts[key][mapType];
+    if(val < minVal) { minVal = val; }
+    if(val > maxVal) { maxVal = val; }
+  }
+
   // color palette
   color = d3.scale.linear()
-    .domain([77, 83])
+    .domain([minVal, maxVal])
     .range(["blue", "red"]);
 
   // load data from JSON and CSV files
@@ -104,7 +125,6 @@ function showMap() {
     .await(ready);
 
 }
-
 
 
 // draw the map
@@ -123,7 +143,7 @@ function ready(error, map, data) {
   features = topojson.feature(map, map.objects.name);
   _Global_features = features;
 
-  // добавление
+  // svg
   svg1.append("g")
     .attr("class", "region")
     .selectAll("path")
@@ -132,7 +152,7 @@ function ready(error, map, data) {
     .attr("d", path)
     .style("fill", function(d) {
       // if data are missed then grey color
-      if(values[d.properties.iso] == null) {
+      if(values[d.properties.iso] == "") {
         return '#eeeeee';
       }
       // else use palette
@@ -146,7 +166,12 @@ function ready(error, map, data) {
   .on("mouseover", function(d) {
     d3.select(this).transition().duration(300).style("opacity", 1);
     div1.transition().duration(300).style("opacity", 1)
-    div1.html(names[d.properties.iso] + "<br/><span style='font-size:16px;font-weight:700'>" + values[d.properties.iso] + "</span>")
+    var level = 'Нет данных';
+    if(values[d.properties.iso] > 0) {
+      level = values[d.properties.iso];
+    }
+
+    div1.html(names[d.properties.iso] + "<br/><span style='font-size:16px;font-weight:700'>" + level + "</span>")
       .style("left", (d3.event.layerX) + "px")
       .style("top", (d3.event.layerY - 30) + "px");
   })
@@ -172,90 +197,4 @@ function ready(error, map, data) {
 };
 
 
-
-/*
-// добавление легенды
-var colorScale = d3.scale.linear()
-  .domain([0, 50, 100]) // перечень значений из датасета(мин.–макс.), по которым надо добавлять цвет
-  .range(['green', 'orange', 'red']); //Цвет, от какого и до какого нужно сделать растяжку
-*/
-
-
-/*
-let widthLegendRow = $('#legend-row').width() * 35 / 100;
-// append a defs (for definition) element to your SVG
-var svgLegend = d3.select('#legend').append('svg')
-  .attr("width", ( widthLegendRow-10 ))
-  .attr("height", "5%");
-var defs = svgLegend.append('defs');
-
-// append a linearGradient element to the defs and give it a unique id
-var linearGradient = defs.append('linearGradient')
-  .attr('id', 'linear-gradient');
-
-// создаем горизонтальный градиент
-linearGradient
-  .attr("x1", "0%")
-  .attr("y1", "0%")
-  .attr("x2", "100%")
-  .attr("y2", "0%");
-
-// append multiple color stops by using D3's data/enter step
-linearGradient.selectAll("stop")
-  .data([{
-      offset: "0%",
-      color: "green"
-    },
-    {
-      offset: "50%",
-      color: "orange"
-    },
-    {
-      offset: "100%",
-      color: "red"
-    }
-  ])
-  .enter().append("stop")
-  .attr("offset", function(d) {
-    return d.offset;
-  })
-  .attr("stop-color", function(d) {
-    return d.color;
-  });
-
-// добавление заголовка легенды
-svgLegend.append("text")
-  .attr("class", "legendTitle")
-  .attr("x", 0)
-  .attr("y", 20)
-  .style("text-anchor", "left")
-  .style("font-size", fontWeightLegent+"rem")
-  .text("Уровень загрязнения %");
-
-// отображение прямоугольника и заполнение градиентом
-svgLegend.append("rect")
-  .attr("x", 10)
-  .attr("y", 30)
-  .attr("width", ( widthLegendRow-50 ))
-  .attr("height", '5%')
-  .style("fill", "url(#linear-gradient)");
-
-//create tick marks
-var xLeg = d3.scale.linear()
-  .domain([0, 100])
-  .range([0, ( widthLegendRow-50 )]);
-
-var axisLeg = d3.svg.axis(xLeg)
-  .scale(xLeg).tickSize(13)
-  .tickValues([0, 100])
-  .tickFormat(function(n) {
-    return n + "%"
-  })
-
-
-svgLegend
-  .attr("class", "axis")
-  .append("g")
-  .attr("transform", "translate(10, 35)")
-  .call(axisLeg);
-*/
+showMap();
