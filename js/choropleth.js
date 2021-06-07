@@ -1,69 +1,3 @@
-var jsonObj = {};
-
-let dataForGraphHighcharts = parseDataFromCSV();
-
-let mapWidthMultiplier, fontWeightLegent;
-
-// параметры в зависимости от размера и соотношения экрана
-if( window.innerWidth >= 1025 ){
-  // множитель ширины карты
-  mapWidthMultiplier = 0.8;
-  // размер шрифта подписи легенды
-  fontWeightLegent = 0.8;
-}
-else {
-  // множитель ширины карты
-  mapWidthMultiplier = 0.9;
-  // размер шрифта подписи легенды
-  fontWeightLegent = 0.6;
-}
-
-if( window.innerHeight >= 769 ) {
-  $('#legend-row').css('margin-top','-9%');//-15vh
-}
-else {
-  $('#legend-row').css('margin-top','-13%');//-12vh
-}
-
-// shape of map
-const width = mapWidthMultiplier*window.innerWidth; //1000;
-const height = width/2; //500;
-
-// color palette
-var color = d3.scale.linear()
-    .domain([77, 83])
-    .range(["blue", "red"]);
-
-// add div for messages
-var div1 = d3.select("#my_dataviz1")
-  .append("div")
-  .attr("class", "tooltip_d3")
-  .style("opacity", 0);
-
-// add SVG
-var svg1 = d3.select("#my_dataviz1")
-  .append("svg")
-  .attr("width", width)
-  .attr("height", height)
-  .style("margin", "10px auto");
-
-// create map projection
-var projection = d3.geo.albers()
-  .rotate([-105, 0])
-  .center([-10, 65])
-  .parallels([52, 64])
-  .scale(0.7*width)
-  .translate([width/2, height/2]);
-
-var path = d3.geo.path().projection(projection);
-
-// load data from JSON and CSV files
-queue()
-  .defer(d3.json, "../data/russia.json?v=1")
-  .defer(d3.csv, "../data/dataset.csv?v=1")
-  .await(ready);
-
-
 function parseDataFromCSV() {
   let dataJSON = {};
   $.get("../data/dataset.csv", function(data) {
@@ -96,6 +30,82 @@ function parseDataFromCSV() {
 }
 
 
+var jsonObj = {};
+
+let dataForGraphHighcharts = parseDataFromCSV();
+
+let mapWidthMultiplier, fontWeightLegent;
+
+// параметры в зависимости от размера и соотношения экрана
+if( window.innerWidth >= 1025 ){
+  // множитель ширины карты
+  mapWidthMultiplier = 0.8;
+  // размер шрифта подписи легенды
+  fontWeightLegent = 0.8;
+}
+else {
+  // множитель ширины карты
+  mapWidthMultiplier = 0.9;
+  // размер шрифта подписи легенды
+  fontWeightLegent = 0.6;
+}
+
+if( window.innerHeight >= 769 ) {
+  $('#legend-row').css('margin-top','-9%');//-15vh
+}
+else {
+  $('#legend-row').css('margin-top','-13%');//-12vh
+}
+
+// shape of map
+const width = mapWidthMultiplier*window.innerWidth; //1000;
+const height = width/2; //500;
+
+// add div for messages
+var div1 = d3.select("#my_dataviz1")
+  .append("div")
+  .attr("class", "tooltip_d3")
+  .style("opacity", 0);
+
+// add SVG
+var svg1 = d3.select("#my_dataviz1")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .style("margin", "10px auto");
+
+// create map projection
+var projection = d3.geo.albers()
+  .rotate([-105, 0])
+  .center([-10, 65])
+  .parallels([52, 64])
+  .scale(0.7*width)
+  .translate([width/2, height/2]);
+
+var path = d3.geo.path().projection(projection);
+
+// default color palette
+var color = d3.scale.linear()
+  .domain([77, 83])
+  .range(["blue", "red"]);
+
+
+function showMap() {
+
+  // color palette
+  color = d3.scale.linear()
+    .domain([77, 83])
+    .range(["blue", "red"]);
+
+  // load data from JSON and CSV files
+  queue()
+    .defer(d3.json, "../data/russia.json")
+    .defer(d3.csv, "../data/dataset.csv")
+    .await(ready);
+
+}
+
+
 
 // draw the map
 function ready(error, map, data) {
@@ -105,7 +115,7 @@ function ready(error, map, data) {
 
   // fill arrays by data from CSV file
   data.forEach( function(d) {
-    values[d.iso3166_alpha2] = d.life_expectancy;
+    values[d.iso3166_alpha2] = d[mapType];
     names[d.iso3166_alpha2] = d.name_ru;
   });
 

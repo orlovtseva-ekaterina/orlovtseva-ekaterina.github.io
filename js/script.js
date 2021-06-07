@@ -1,3 +1,5 @@
+let mapType = "life_expectancy";
+
 let params = {
   life_expectancy: "Ожидаемая продолжительность жизни при рождении, лет",
   cash_income_2020: "Денежные доходы (2020), рубль",
@@ -13,23 +15,6 @@ let params = {
   indices_of_economy_2019: "Индексы физического объема валового регионального продукта и валовой добавленной стоимости (2019), проценты",
   environmental_quality_2020: "Качество окружающей среды (2020), проценты"
 }
-/*
-let checked = {
-  cash_income_2020: "on",
-  cash_income_deficit_2020: "on",
-  decile_ratio_2019: "on",
-  environmental_quality_2020: "on",
-  funds_ratio_2020: "on",
-  gini_coefficient_2020: "on",
-  healthy_life_expectancy_2019: "on",
-  indices_of_economy_2019: "on",
-  life_expectancy: "on",
-  number_of_higher_education_organizations: "on",
-  number_of_higher_education_students: "on",
-  population_with_monetary_incomes_below_the_subsistence_level: "on",
-  real_disposable_cash_income_2020: "on"
-};
-*/
 
 function updateDataGraph( nameRegion, data ) {
   let firstGraphParam = {
@@ -103,8 +88,12 @@ $(document).on('change','#yearRange',function(){
   console.log(valOnRange);
 });
 
-$(document).on('change', '#mapType', function(){
-  let mapType = $('#mapType').val();
+$(document).on('change', '#mapType', function() {
+  // update global variable
+  mapType = $('#mapType').val();
+  console.log(mapType);
+  showMap();
+  /*
   if( mapType == 'air' ){
     $('#my_dataviz2').hide();
     $('#my_dataviz1').show();
@@ -113,6 +102,7 @@ $(document).on('change', '#mapType', function(){
     $('#my_dataviz1').hide();
     $('#my_dataviz2').show();
   }
+  */
 });
 
 
